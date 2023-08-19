@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+
+  nginx:
+    build: nginx
+    container_name: nginx
+    entrypoint: wait-for node:3000 -t 100 -- ./docker-entrypoint.sh nginx -g "daemon off;"
+    networks:
+      - nodenet
+    ports:
+      - "8080:80"
+    depends_on:
+      - node
+
+  node:
+    build: node
+    container_name: node
+    entrypoint: wait-for mysql:3306 -t 100 -- node index.js
+    networks:
+      - nodenet
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    command: --innodb-use-native-aio=0
+    container_name: mysql
+    restart: always
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=mysqlnode
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - nodenet
+
+networks:
+  nodenet:
+    driver: bridge
