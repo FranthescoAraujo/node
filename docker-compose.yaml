@@ -24,10 +24,11 @@ services:
 
   mysql:
     image: mysql:5.7
-    command: --innodb-use-native-aio=0
+    command: --innodb-use-native-aio=0 
     container_name: mysql
     restart: always
     volumes:
+      - ./config:/docker-entrypoint-initdb.d
       - ./mysql:/var/lib/mysql
     environment:
       - MYSQL_DATABASE=mysqlnode
