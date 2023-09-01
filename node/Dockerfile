@@ -10,6 +10,4 @@ WORKDIR /usr/src/app
 RUN npm install express \
     npm install mysql --save
 
-COPY index.js .
-
 EXPOSE 3000

@@ -16,7 +16,9 @@ services:
   node:
     build: node
     container_name: node
-    entrypoint: wait-for mysql:3306 -t 100 -- node index.js
+    entrypoint: wait-for mysql:3306 -t 100 -- node fullcycle/index.js
+    volumes:
+      - ./node/fullcycle:/usr/src/app/fullcycle
     networks:
       - nodenet
     depends_on:
